@@ -42,17 +42,21 @@ namespace WebView2Playground
         private async void InitializeWebView2()
         {
             // setting user agent string by providing additional arguments
-            var environment = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, null, new Microsoft.Web.WebView2.Core.CoreWebView2EnvironmentOptions
-            {
-                AdditionalBrowserArguments = "--user-agent=WebView2Playground/1.0"
-            });
-            await this.WebView.EnsureCoreWebView2Async(environment);
+            //var environment = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, null, new Microsoft.Web.WebView2.Core.CoreWebView2EnvironmentOptions
+            //{
+            //    AdditionalBrowserArguments = "--user-agent=WebView2Playground/1.0"
+            //});
+            await this.WebView.EnsureCoreWebView2Async(/* environment */);
 
             // or, by setting UserAgent property of CoreWebView2Settings
             // this.WebView.CoreWebView2.Settings.UserAgent = "WebView2Playground/1.0";
 
-            // fail both the cases
+            // or, by calling DevToolsProtocol method
+            await this.WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.setUserAgentOverride", "{\"userAgent\":\"WebView2Playground/1.0\",\"userAgentMetadata\":{\"mobile\":false,\"platform\":\"Windows\",\"platformVersion\":\"10.0.25387\",\"architecture\":\"x64\",\"model\":\"\"}}");
+            
+            // fail all the cases
             this.WebView.Source = new Uri("edge://about");
+
         }
     }
 }
